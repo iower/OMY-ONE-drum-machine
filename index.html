@@ -1,21 +1,32 @@
 <DOCTYPE html>
 <html>
 	<head>
+		<title>Drum machine</title>
 	</head>
 	<body>
 		
-		<div id="lines">
-			<div id="line">
+		
+		<div id="app">
+			<div>
+				<div id="tracks">
+					<div class="track" v-for="track in tracks">
+						<div class="pad" v-for="pad in track.pads" v-bind:class="{'active': pad.active}" @click="setActive(pad)"></div>
+					</div>
+				</div>
+				
+				<div id="settings">
+					<div class="item">
+						<label>BPM:</label>
+						<input id="bpm-control" type="range" min="50" max="300" value="120" @change="setBPM">
+						<span id="bpm-value">{{ bpm }}</span>
+					</div>
+				</div>
+				
 			</div>
 		</div>
 		
-		<div id="settings">
-			<div class="item">
-				<label>BPM:</label>
-				<input id="bpm-control" type="range" min="50" max="300" value="120">
-				<span id="bpm-value">???</span>
-			</div>
-		</div>
+		
+		
 		
 		<style>
 			
@@ -27,12 +38,12 @@
 				margin-top: 10px
 			}
 			
-			#lines {
+			#tracks {
 				border: 1px solid #aaa;
 				padding: 20px;
 			}
 			
-			#line {
+			.track {
 				display: grid;
 				grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 			}
@@ -61,55 +72,98 @@
 			
 		</style>
 		
+		<script src="vue.js"></script>
+		
 		<script>
 			
-			const pads = [];
-			const numberOfPads = 8;
-			let bpm = 120;
-			
-			const line = document.getElementById('line');
-			
-			for (let i = 0; i < numberOfPads; i++) {
+			const app = new Vue({
+				el: '#app',
+				data: {
+					bpm: 120,
+					tracks: [
+						// for example
+						{
+							pads: [
+								{active: false, playing: false},
+								{active: false, playing: false},
+								{active: false, playing: false},
+								{active: false, playing: false},
+							]
+						},
+						{
+							pads: [
+								{active: false, playing: false},
+								{active: false, playing: false},
+								{active: false, playing: false},
+								{active: false, playing: false},
+							]
+						},
+					],
+					numberOfTracks: 4,
+					numberOfPads: 8,
+					currentPad: 0,
+					timerId: 0,
+				},
+				methods: {
+					addTrack: (numberOfPads) => {
+						const track = {
+							id: 0,
+							settings: {
+								color: gray,
+							},
+							pads: [],
+						};
+						for (let i = 0; i < numberOfPads; i++) {
+							track.pads.push(false);
+						}
+						this.tracks.push(track);
+					},
+					createPads: function(track, numberOfPads) {
+						/*for (let i = 0; i < numberOfPads; i++) {
+							const pad = document.createElement('div');
+							pad.classList.add('pad');
+							track.appendChild(pad);
+						}*/
+					},
+					createTracks: function() {
+						for (let i = 0; i < this.numberOfTracks; i++) {
+							createTrack();
+						}
+					},
+					createTrack: function() {
+						const track = {
+							//sound: null,
+							pads: [],
+						};
+						track.pads = [];
+						
+						this.tracks.push(track)
+					},
+					shiftActivePad: function(n) {
+						/*pads.forEach(pad => pad.classList.remove('playing'));
+						const playingPad = pads[currentPad];
+						playingPad.classList.add('playing');
+						currentPad = currentPad == numberOfPads - 1 ? 0 : ++currentPad;*/
+					},
+					runTimer: function() {
+						this.timerId = setInterval(() => {
+							this.shiftActivePad();
+						}, 1000 * 60 / this.bpm);
+					},
+					stopTimer: function() {
+						clearInterval(this.timerId);
+					},
+					setBPM: function(event) {
+						const bpm = event.target.value;
+						this.bpm = bpm;
+						this.stopTimer();
+						this.runTimer(bpm);
+					},
+					setActive: function(pad) {
+						pad.active = !pad.active;
+					},
+				},
 				
-				const pad = document.createElement('div');
-				pad.classList.add('pad');
-				line.appendChild(pad);
-				
-				pad.addEventListener('click', (e) => {
-					const pad = e.target;
-					pad.classList.toggle('active');
-				});
-				
-				pads.push(pad);
-				
-			}
-			
-			let currentPad = 0;
-			
-			let timerId = null;
-			
-			const runTimer = (bpm) => {
-				timerId = setInterval(() => {
-					pads.forEach(pad => pad.classList.remove('playing'));
-					const playingPad = pads[currentPad];
-					playingPad.classList.add('playing');
-					currentPad = currentPad == numberOfPads - 1 ? 0 : ++currentPad;
-				}, 1000 * 60 / bpm);
-			};
-			
-			const stopTimer = () => {
-				clearInterval(timerId);
-			};
-			
-			
-			const bpmControl = document.getElementById('bpm-control');
-			const bpmValue = document.getElementById('bpm-value');
-			
-			bpmControl.addEventListener('change', function() {
-				bpm = bpmControl.value;
-				bpmValue.innerText = bpm;
-				stopTimer();
-				runTimer(bpm);
 			});
 			
 		</script>
