@@ -4,13 +4,32 @@
 	</head>
 	<body>
 		
-		<div id="line">
+		<div id="lines">
+			<div id="line">
+			</div>
+		</div>
+		
+		<div id="settings">
+			<div class="item">
+				<label>BPM:</label>
+				<input id="bpm-control" type="range" min="50" max="300" value="120">
+				<span id="bpm-value">???</span>
+			</div>
 		</div>
 		
 		<style>
 			
 			* {
 				box-sizing: border-box;
+			}
+			
+			body * + * {
+				margin-top: 10px
+			}
+			
+			#lines {
+				border: 1px solid #aaa;
+				padding: 20px;
 			}
 			
 			#line {
@@ -35,13 +54,18 @@
 				border: 2px solid red;
 			}
 			
+			#settings {
+				border: 1px solid #aaa;
+				padding: 20px;
+			}
+			
 		</style>
 		
 		<script>
 			
 			const pads = [];
 			const numberOfPads = 8;
-			const bpm = 120;
+			let bpm = 120;
 			
 			const line = document.getElementById('line');
 			
@@ -62,12 +86,31 @@
 			
 			let currentPad = 0;
 			
-			setInterval(() => {
-				pads.forEach(pad => pad.classList.remove('playing'));
-				const playingPad = pads[currentPad];
-				playingPad.classList.add('playing');
-				currentPad = currentPad == numberOfPads - 1 ? 0 : ++currentPad;
-			}, 1000 * 60 / bpm);
+			let timerId = null;
+			
+			const runTimer = (bpm) => {
+				timerId = setInterval(() => {
+					pads.forEach(pad => pad.classList.remove('playing'));
+					const playingPad = pads[currentPad];
+					playingPad.classList.add('playing');
+					currentPad = currentPad == numberOfPads - 1 ? 0 : ++currentPad;
+				}, 1000 * 60 / bpm);
+			};
+			
+			const stopTimer = () => {
+				clearInterval(timerId);
+			};
+			
+			
+			const bpmControl = document.getElementById('bpm-control');
+			const bpmValue = document.getElementById('bpm-value');
+			
+			bpmControl.addEventListener('change', function() {
+				bpm = bpmControl.value;
+				bpmValue.innerText = bpm;
+				stopTimer();
+				runTimer(bpm);
+			});
 			
 		</script>
 		
