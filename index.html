@@ -10,7 +10,7 @@
 				<div id="tracks">
 					<div class="current-pad">{{ currentPad + 1 }}</div>
 					<div class="track" v-for="track in tracks">
-						<div class="pad" v-for="pad in track.pads" v-bind:class="{'active': pad.active, 'playing': pad.playing}" @click="setActive(pad)"></div>
+						<div class="pad" v-for="pad in track.pads" v-bind:class="{'active': pad.active, 'playing': pad.playing}" @click="setActive(track, pad);"></div>
 					</div>
 				</div>
 				
@@ -20,7 +20,7 @@
 					</div>
 					<div class="item">
 						<label>BPM:</label>
-						<input id="bpm-control" type="range" min="50" max="400" value="120" @change="setBPM">
+						<input id="bpm-control" type="range" min="70" max="500" value="220" @change="setBPM">
 						<span id="bpm-value">{{ bpm }}</span>
 					</div>
 				</div>
@@ -82,6 +82,8 @@
 		
 		<script>
 			
+			const context = new AudioContext() || new webkitAudioContext();
+			
 			const app = new Vue({
 				el: '#app',
 				data: {
@@ -89,7 +91,12 @@
 					tracks: [
 						// for example
 						{
+							sample: 'hat',
 							pads: [
+								{active: false, playing: false},
+								{active: false, playing: false},
+								{active: false, playing: false},
+								{active: false, playing: false},
 								{active: false, playing: false},
 								{active: false, playing: false},
 								{active: false, playing: false},
@@ -97,7 +104,25 @@
 							]
 						},
 						{
+							sample: 'snare',
 							pads: [
+								{active: false, playing: false},
+								{active: false, playing: false},
+								{active: false, playing: false},
+								{active: false, playing: false},
+								{active: false, playing: false},
+								{active: false, playing: false},
+								{active: false, playing: false},
+								{active: false, playing: false},
+							]
+						},
+						{
+							sample: 'bass',
+							pads: [
+								{active: false, playing: false},
+								{active: false, playing: false},
+								{active: false, playing: false},
+								{active: false, playing: false},
 								{active: false, playing: false},
 								{active: false, playing: false},
 								{active: false, playing: false},
@@ -105,11 +130,12 @@
 							]
 						},
 					],
-					numberOfTracks: 2,
-					numberOfPads: 4,
+					numberOfTracks: 3,
+					numberOfPads: 8,
 					currentPad: -1,
 					timerId: 0,
 					isPlaying: false,
+					soundBuffers: {},
 				},
 				/* computed: {
 					tracks: function {
@@ -121,6 +147,9 @@
 					currentPad: function (n) {
 						this.tracks.forEach(track => {
 							track.pads[n].playing = true;
+							if (track.pads[n].active) {
+								this.playSample(track.sample);
+							}
 							const previousN = n != 0 ? n - 1 : track.pads.length - 1;
 							track.pads[previousN].playing = false;
 						});
@@ -172,14 +201,44 @@
 							this.runTimer(bpm);
 						}
 					},
-					setActive: function(pad) {
+					setActive: function(track, pad) {
 						pad.active = !pad.active;
+						if (pad.active && !this.isPlaying) {
+							this.playSample(track.sample);
+						}
 					},
 					startStop: function() {
 						this.isPlaying = !this.isPlaying;
 						this.isPlaying ? this.runTimer() : this.stopTimer();
 					},
+					loadSample: function(sampleName) {
+						const request = new XMLHttpRequest();
+						const url = `samples/${sampleName}.wav`;
+						request.open('GET', url, true);
+						request.responseType = 'arraybuffer';
+						request.send();
+						const buffers = this.soundBuffers;
+						request.onload = function() {
+							context.decodeAudioData(request.response, function(buffer) {
+								buffers[sampleName] = buffer;
+							});
+						};
+					},
+					playSample: function(sampleName) {
+						if (typeof this.soundBuffers[sampleName] !== 'undefined') {
+							const source = context.createBufferSource();
+							source.buffer = this.soundBuffers[sampleName];
+							source.connect(context.destination);
+							source.start();
+						}
+					},
 				},
+				mounted: function() {
+					this.loadSample('hat');
+					this.loadSample('snare');
+					this.loadSample('bass');
+					
+				}
 			});
 			
 		</script>
