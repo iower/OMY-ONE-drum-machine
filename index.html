@@ -7,23 +7,29 @@
 		
 		<div id="app">
 			<div>
-				<div id="tracks">
+				<header>
+					<div id="logo">
+						<img src="img/omy-one-logo.png" title="OMY ONE">
+					</div>
 					<div class="current-pad">{{ currentPad + 1 }}</div>
+				</header>
+				<div id="tracks">
 					<div class="track" v-for="track in tracks">
 						<div class="pad" v-for="pad in track.pads" v-bind:class="{'active': pad.active, 'playing': pad.playing}" @click="setActive(track, pad);"></div>
 					</div>
 				</div>
-				
-				<div id="settings">
-					<div class="item stop">
-						<button @click="startStop">{{ isPlaying ? 'Stop' : 'Start' }}</button>
+				<footer>
+					<div id="settings">
+						<div class="item stop">
+							<button @click="startStop">{{ isPlaying ? 'Stop' : 'Play' }}</button>
+						</div>
+						<div class="item tempo">
+							<label>Tempo:</label>
+							<input id="bpm-control" type="range" min="150" max="600" value="400" @change="setBPM">
+							<!-- <span id="bpm-value">{{ bpm }}</span> -->
+						</div>
 					</div>
-					<div class="item">
-						<label>Tempo:</label>
-						<input id="bpm-control" type="range" min="100" max="600" value="400" @change="setBPM">
-						<!-- <span id="bpm-value">{{ bpm }}</span> -->
-					</div>
-				</div>
+				</footer>
 			</div>
 		</div>
 		
@@ -33,14 +39,56 @@
 				box-sizing: border-box;
 			}
 			
-			body * + * {
-				margin-top: 10px
+			html {
+				background-color: #020209;
+				color: #844aa3;
+				background-image: url('img/bg.png')
+			}
+			
+			button {
+				border: 2px solid #844aa3;
+				border-radius: 3px;
+				background: #020209;
+				padding: 0;
+				color: #844aa3;
+				font-weight: bold;
+				cursor: pointer;
+				transition: all 0.1s ease;
+			}
+			
+			button:active {
+				transform: translateY(2px);
+			}
+			
+			body {
+				padding: 0;
+				margin: 0;
+			}
+			
+			body .track + .track {
+				margin-top: 0.3vw;
+			}
+			
+			header {
+				position: relative;
+				padding: 10px;
+			}
+			
+			footer {
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				width: 100%;
+				height: 60px;
+				padding: 10px;
 			}
 			
 			#tracks {
-				border: 1px solid #aaa;
-				padding: 20px;
-				position: relative;
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				width: 100%;
+				padding-left: 1.1vw;
 			}
 			
 			.current-pad {
@@ -55,11 +103,11 @@
 			}
 			
 			.pad {
-				margin: 2px;
-				width: 50px;
-				height: 50px;
-				border-radius: 4px;
-				background-color: #ddd;
+				margin: 0.3vw;
+				width: 5vw;
+				height: 5vw;
+				border-radius: 3px;
+				background-color: #2c2c34;
 				cursor: pointer;
 			}
 			
@@ -67,21 +115,29 @@
 			.pad:nth-child(5),
 			.pad:nth-child(9),
 			.pad:nth-child(13) {
-				background-color: #bbb;
+				background-color: #3d3d47;
 			}
 			
 			.pad.active {
-				background-color: #6c6;
+				background-color: #764b9f;
 			}
 			
 			.pad.playing {
-				border: 2px solid red;
+				background-color: #567051;
+			}
+			
+			.pad.active.playing {
+				background-color: #99c554;
 			}
 			
 			#settings {
-				border: 1px solid #aaa;
-				padding: 20px;
 				position: relative;
+			}
+			
+			input#bpm-control {
+				vertical-align: middle;
+				width: 55%;
+				background-color: #2c2c34;
 			}
 			
 			.item.stop {
@@ -93,6 +149,12 @@
 			.item.stop button {
 				width: 40px;
 				height: 40px;
+			}
+			
+			.item.tempo {
+				width: 70%;
+				position: relative;
+				top: 9px;
 			}
 			
 		</style>
