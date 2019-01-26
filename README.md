@@ -1,21 +1,34 @@
-# Omi-one drum machine
+# OMY|ONE drum machine
 
-## Now we are working on functions
+## Now we are working on features
 
-- Visual design
-- Save/load sequence
 - Tracks number setting
 - Track sample selection
 - Track balance control
 - Track volume control
 - Track EQ
+- Website
+- Improve timer
+- Lots of samples
+- Save/load sequence
 - Skins
+- PWA
 - APK
+- Feedback system
+- MIDI support
+- Generative samples
+- Visualizer
 - Own Earth
 
 ## Development history
 
-### #1, "Genesis"
+### Step #2, "Aestetic"
+
+- Visual scheme
+- Responsive design
+- Fullscreen mode
+
+### Step #1, "Genesis"
 
 - Play sounds
 - Pads activation
