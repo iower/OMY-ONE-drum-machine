@@ -1,23 +1,26 @@
-# OMY|ONE drum machine
+# OMY|ONE
 
 ## Now we are working on features
 
-- Tracks number setting
-- Track sample selection
-- Track balance control
-- Track volume control
-- Track EQ
+- Modules
+- Mixer module
+- EQ module
+- Drum-machine module: Improve timer
+- Drum-machine module: Tracks number setting
+- Drum-machine module: Track sample selection
+- Drum-machine module: Track balance control
+- Drum-machine module: Track volume control
+- Drum-machine module: Track EQ
+- Drum-machine module: Lots of samples
 - Website
-- Improve timer
-- Lots of samples
-- Save/load sequence
+- Visualizer module
+- Save/load project
 - Skins
 - PWA
 - APK
 - Feedback system
 - MIDI support
 - Generative samples
-- Visualizer
 - Own Earth
 
 ## Development history
