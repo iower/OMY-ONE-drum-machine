@@ -1,27 +1,16 @@
-# OMY|ONE
+# OMY|ONE drum-machine
+
+[>>> Run the module in the browser! <<<](https://iower.github.io/OMY-ONE-drum-machine/)
 
 ## Now we are working on features
 
-- Modules
-- Mixer module
-- EQ module
-- Drum-machine module: Improve timer
-- Drum-machine module: Tracks number setting
-- Drum-machine module: Track sample selection
-- Drum-machine module: Track balance control
-- Drum-machine module: Track volume control
-- Drum-machine module: Track EQ
-- Drum-machine module: Lots of samples
-- Website
-- Visualizer module
-- Save/load project
-- Skins
-- PWA
-- APK
-- Feedback system
-- MIDI support
-- Generative samples
-- Own Earth
+- Improve timer
+- Tracks number setting
+- Track sample selection
+- Track balance control
+- Track volume control
+- Track EQ
+- Lots of samples
 
 ## Development history
 
